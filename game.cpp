@@ -9,6 +9,7 @@ bool alive;
 bool questOnePass = false;
 bool questTwoPass = false;
 bool questThreePass = false;
+bool questFourPass = false;
 
 
 bool fight(Player you, Player enemy){
@@ -34,7 +35,7 @@ void trollScene(Player &mainPlayer){
     cout<<"Trolls!\n0. Hide.\n1. Attack the trolls."<<endl;
     while(true){
      cin>>input;
-     if(cin.fail() || choice < 0 || choice > 1){
+     if(cin.fail() || input < 0 || input > 1){
             cout << "Invalid Input, try again \n";
             cin.clear();
             cin.ignore(10000,'\n');
