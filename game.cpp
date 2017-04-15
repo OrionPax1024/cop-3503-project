@@ -97,35 +97,33 @@ void dragonScene (Player &mainPlayer) {
 }
 
 void sphinxScene (Player &mainPlayer) {
-    string riddleAnswer;
+ 
     Sphinx Sphinx;
     cout << "You encounter a Sphinx, it wants to ask you three riddles before you may pass. You have one try for each riddle so answer carefully." << endl;
-    for (int i = 1; i < 4; i++) {
-        cout << Sphinx.getRiddle(i) << endl;
-        cin >> riddleAnswer;
-        if(riddleAnswer.compare(Sphinx.getRiddleAns(i))==0) {
-            cout << "Correct!" << endl;
-            break;
-        }
-        else{
-            cout << "WRONG!!!!!!!!" << endl;
-        Sphinx.remainingAttempts--;
-        if (Sphinx.remainingAttempts == 0){
-            break;
-            }
-        }
-    }
-    if (Sphinx.getRemainingAttempts() != 0) {
-        cout << "\"Congratulations. You have passed the test of time.\"" << endl;
-        if(Sphinx.getRemainingAttempts() == 3){
-        cout << "\"Take this sword, as a gift. It might prove useful in the future.\"" << endl;
-            mainPlayer.setHasSword();
-        }
-        questTwoPass = true;
-    }else if (Sphinx.getRemainingAttempts() == 0) {
-        cout << "You are out of tries. Game Over.";
-        alive = false;
-    }
+	int attemptsUsed = AskRiddle();
+	switch (attemptsUsed)
+	{
+	case 1:
+		cout << "\"Congratulations. You have passed the test of time.\"" << endl;
+		cout << "\"Take this sword, as a gift. It might prove useful in the future.\"" << endl;
+		mainPlayer.setHasSword();
+		questTwoPass = true;
+		break;
+	case 2:
+		cout << "\"Congratulations. You have passed the test of time.\"" << endl;
+		questTwoPass = true;
+		break;
+	case 3:
+		cout << "\"Congratulations. You have passed the test of time.\"" << endl;
+		questTwoPass = true;
+		break;
+	case 4:
+		cout << "You are out of tries. Game Over.";
+		alive = false;
+		break;
+
+	}
+   
 }
 
 void castleScene (Player &mainPlayer) {
