@@ -9,6 +9,7 @@ bool alive;
 bool questOnePass = false;
 bool questTwoPass = false;
 bool questThreePass = false;
+int fightCount = 0;
 
 
 bool fight(Player you, Player enemy){
@@ -31,12 +32,12 @@ bool fight(Player you, Player enemy){
 void trollScene(Player &mainPlayer){
     int input;
     int hideCount = 0;
-    cout<<"Trolls!\n0. Hide.\n1. Attack the trolls."<<endl;
+    cout<<"Trolls!\n0. Hide from the trolls.\n1. Attack the trolls."<<endl;
     cin>>input;
     Player troll(15,1,"Troll");
     while(hideCount != 6 && input == 0){
         hideCount++;
-        cout<<"You're crouching behind a rock. The trolls don't seem to have noticed you yet. Enter 1 to attack, 0 to hide."<<endl;
+        cout<<"You're crouching behind a rock. The trolls don't seem to have noticed you yet.\n0. Hide from the trolls.\n1. Attack the trolls."<<endl;
         cin>>input;
         
     }
@@ -57,31 +58,30 @@ void trollScene(Player &mainPlayer){
 }
 void dragonScene (Player &mainPlayer) {
     int input;
-    cout << "In the distance you spot a dragon in your path. There are no other routes. You get closer and notice it is fast asleep.\n0. Try and sneak past the dragon.\n1. Fight the dragon.";
+    cout << "In the distance you spot a dragon in your path. There are no other routes. You get closer and notice it is fast asleep.\n0. Try and sneak past the dragon.\n1. Fight the dragon."<<endl;
     cin >> input;
     Player dragon (45,20,"Dragon");
     
     switch (input) {
-        case 0: if (mainPlayer.getStealth() > dragon.getStealth()) {
+        case 0: if(mainPlayer.getStealth() > dragon.getStealth()){
             cout << "You successfully snuck past the dragon while it slept." << endl;
             questThreePass = true;
-        }
-        else {
+        }else{
             cout << "You woke the dragon and in a fit of rage it kills you." << endl;
             alive = false;
         }
-        case 1: if (mainPlayer.getHasSword()) {
+        break;
+        case 1: if(mainPlayer.getHasSword()){
             cout << "You use your sword and effortlessly slay the dragon." << endl;
             questThreePass = true;
-        }
-        else if (fight (mainPlayer, dragon)) {
+        }else if(fight(mainPlayer, dragon)){
             cout << "You fought the dragon and slew it." << endl;
             questThreePass = true;
-        }
-        else {
+        }else{
             cout << "The dragon slew you." << endl;
             alive = false;
         }
+        break;
     }
 }
 
@@ -93,11 +93,11 @@ void sphinxScene (Player &mainPlayer) {
         cout << Sphinx.getRiddle(i) << endl;
         cin >> riddleAnswer;
         if(riddleAnswer.compare(Sphinx.getRiddleAns(i))==0) {
-            cout << "Correct!" << endl;
+            cout << "\"Correct!\"" << endl;
             break;
         }
         else{
-            cout << "WRONG!!!!!!!!" << endl;
+            cout << "\"Wrong!!!\"" << endl;
         Sphinx.remainingAttempts--;
         if (Sphinx.remainingAttempts == 0){
             break;
@@ -117,9 +117,73 @@ void sphinxScene (Player &mainPlayer) {
     }
 }
 
+void castleScene (Player &mainPlayer) {
+    int input;
+    int rn = rand() % 4;
+    string monsterName;
+    if (rn == 3) monsterName = "snake";
+    else if (rn == 2) monsterName = "rabid princess";
+    else if (rn == 1) monsterName = "bear";
+    else monsterName = "vicious beast";
+    int monsterStrength = (rand() % 15) + 5;
+    int monsterStealth = (rand() % 15) + 5;
+    Player monster(monsterStrength, monsterStealth, monsterName);
+    cout << "Up ahead you see a castle. You feel compelled to enter. Suddenly a " << monsterName << " jumps out at you.\n0. Try and sneak past the " << monsterName << ".\n1. Fight the " << monsterName <<"."<<endl;
+    cin >> input;
+    
+    switch (input) {
+        case 0: if (mainPlayer.getStealth() > monster.getStealth()) {
+            cout << "You successfully snuck past the " << monsterName << "." << endl;
+        }
+        else {
+            cout << "The " << monsterName << " notices you in your sad attempt to hide and in a fit of rage it kills you.\n" << endl;
+            alive = false;
+        }
+        break;
+        case 1: if (fight (mainPlayer, monster)) {
+            cout << "You fought the " << monsterName << " and slew it." << endl;
+        }
+        else {
+            cout << "The " << monsterName << " slew you." << endl;
+            alive = false;
+        }
+        break;
+    }
+    while(alive){
+        rn = rand() % 4;
+        if (rn == 3) monsterName = "snake";
+        else if (rn == 2) monsterName = "rabid princess";
+        else if (rn == 1) monsterName = "bear";
+        else monsterName = "vicious beast";
+        int monsterStrength = (rand() % 15) + 5;
+        int monsterStealth = (rand() % 15) + 5;
+        Player monster(monsterStrength, monsterStealth, monsterName);
+        cout<<"You go further into the castle. Suddenly a " << monsterName << " jumps out at you.\n0. Try and sneak past the " << monsterName <<
+        ".\n1. Fight the " << monsterName <<"."<<endl;
+        cin >> input;
+        switch (input) {
+            case 0: if (mainPlayer.getStealth() > monster.getStealth()) {
+                cout << "You successfully snuck past the " << monsterName << "." << endl;
+            }
+            else {
+                cout << "The " << monsterName << " notices you in your sad attempt to hide and in a fit of rage it kills you.\n" << endl;
+                alive = false;
+            }
+            break;
+            case 1: if (fight(mainPlayer, monster)) {
+                cout << "You fought the " << monsterName << " and slew it." << endl;
+            }
+            else {
+                cout << "The " << monsterName << " slew you." << endl;
+                alive = false;
+            }
+            break;
+        }
+    }
+}
+
 void tavern(Player &mainPlayer){
     cout << "While exploring you notice a building in the distance, upon closer inspection you see a sign that says: Drunken Horseman Tavern\nYou enter the tavern and notice they are holding bar fights."<<endl;
-    int fightCount = 0;
     int choice = 0;
     while(true){
         cout << "What would you like to do?\n0. Leave the tavern.\n1. Fight." << endl;
@@ -141,7 +205,7 @@ void tavern(Player &mainPlayer){
     }
 }
 
-void cave (Player &mainPlayer){
+void cave(Player &mainPlayer){
     cout << "You have discovered a cave.\nYou decide to enter in the hopes that there might be treasure.\n";
     int choice;
     
@@ -149,7 +213,7 @@ void cave (Player &mainPlayer){
     
     for (int i = 0; i < 6; i++) {
         if (i < 5) {
-            cout << "You encounter "<<caveEncounters[i]<<".\n0. Fight them\n1. Run out of the cave." << endl;
+            cout << "You encounter "<<caveEncounters[i]<<".\n0. Fight them.\n1. Run past them, further into the cave." << endl;
             cin >> choice;
             if(cin.fail() || choice < 0 || choice > 1) {
                 cout << "Invalid Input, try again \n";
@@ -157,20 +221,21 @@ void cave (Player &mainPlayer){
                 cin.ignore(10000,'\n');
             }
             else if (choice == 0){
-                cout << "You kill the beast and absorbed their strength" << endl;
+                cout << "You kill the beast and absorbed their strength." << endl;
                 mainPlayer.addStrength();
             }
             else if (choice == 1) {
-                cout << "You managed to escape from the cave beast" << endl;
+                cout << "You managed to escape." << endl;
                 mainPlayer.addStealth();
                 break;
             }
         }
         else if (i == 5) {
-            cout << "You have discovered a treasure chest at the end of the cave.\nEagerly, you open the chest and discover that it is empty.\nYou decide to leave the cave dissapointed.";
+            cout << "You have discovered a treasure chest at the end of the cave.\nEagerly, you open the chest and discover that it is empty.\nYou decide to leave the cave disappointed.";
         }
     }
 }
+
 void forest(Player &mainPlayer){
     
     cout << "While exploring you enter a forest. You spot a little boy wandering around alone."<<endl;
@@ -186,35 +251,62 @@ void forest(Player &mainPlayer){
         }else if(choice == 0 ){
             cout << "The boy thanks you for your kindness and offers you new shoes. \n";
             mainPlayer.addStealth();
-            break;
         }
         else{
             return;
         }
     }
 }
+
 void junction(int junctionType, Player &mainPlayer){
-    
-switch(junctionType){
-  case 0:
-    tavern(mainPlayer);
-    break;
-  case 1:
-    forest(mainPlayer);
-    break;
-  case 2:
-    cave(mainPlayer);
-    break;
-  default:
-    cout<<"You've reached a dead end in the road.";
-    break;
+    switch(junctionType){
+        case 0:
+            tavern(mainPlayer);
+            break;
+        case 1:
+            forest(mainPlayer);
+            break;
+        case 2:
+            cave(mainPlayer);
+            break;
+        default:
+            cout<<"You've reached a dead end in the road.";
+            break;
   }
-    
 }
 
+void inputSelection(int input, int race, Player &mainPlayer){
+    if(cin.fail() || input < 0 || input > 2){
+        cin.clear();
+        cout <<"Selection not found. Try again.\n";
+        cin.ignore(10000,'\n');
+    }else if(input == 0){
+        if(questOnePass == false){
+            trollScene(mainPlayer);
+        }else if(questTwoPass == false){
+            sphinxScene(mainPlayer);
+        }else if(questThreePass == false){
+            dragonScene(mainPlayer);
+        }else{
+            castleScene(mainPlayer);
+        }
+    }else if(input == 1){
+        if(questOnePass == false){
+            junction(0, mainPlayer);
+        }else if(questTwoPass == false){
+            junction(1, mainPlayer);
+        }else if(questThreePass == false){
+            junction(2, mainPlayer);
+        }else{
+            cout<<"You go exploring and find nothing of interest."<<endl;
+        }
+    }else if(input == 2){
+        mainPlayer.printStats(race);
+    }
 
-int main() {
-    
+}
+
+int main(){
     alive = true;
     string name;
     int input;
@@ -222,6 +314,7 @@ int main() {
     cout << "Enter Name: ";
     cin >> name;
     Player mainPlayer(0,0,name);
+    
     while(true){
         cout << "Select your race:\n";
         cout <<"1. Elf\n2. Orc\n3. Nord\n4. Goblin\n5. Human\n";
@@ -259,92 +352,33 @@ int main() {
         default:
             break;
     }
+    
     while(true){
     cout << "Welcome, "<<mainPlayer.getName()<<". You are on a road.\n0. Go forward.\n1. Explore.\n2. View stats."<<endl;
-    
     cin >> input;
-    
-    if(cin.fail() || input < 0 || input > 2){
-        cin.clear();
-        cout <<"Selection not found. Try again.\n";
-        cin.ignore(10000,'\n');
-    }else if(input == 0){
-        trollScene(mainPlayer);
-    }else if(input == 1){
-        junction(0, mainPlayer);
-    }else if(input == 2){
-        mainPlayer.printStats(race);
-    }
+    inputSelection(input, race, mainPlayer);
     
     while(alive){
-        
         cout<<"You are back on a road.\n0. Go forward.\n1. Explore.\n2. View stats."<<endl;
         cin>>input;
-        
-        if(cin.fail() || input < 0 || input > 2){
-            cin.clear();
-            cout <<"Selection not found. Try again.\n";
-            cin.ignore(10000,'\n');
-        }else if(input == 0){
-            if(questOnePass == false){
-                trollScene(mainPlayer);
-            }else if(questTwoPass == false){
-                sphinxScene(mainPlayer);
-            }else if(questThreePass == false){
-                dragonScene(mainPlayer);
-            }else{
-                //castleScene(mainPlayer);
-            }
-        }else if(input == 1){
-            if(questOnePass == false){
-                junction(0, mainPlayer);
-            }else if(questTwoPass == false){
-                junction(1, mainPlayer);
-            }else if(questThreePass == false){
-                junction(2, mainPlayer);
-            }
-        }else if(input == 2){
-            mainPlayer.printStats(race);
-        }
+        inputSelection(input, race, mainPlayer);
     }
+        
     int decide;
     cout << "Would you like to try again?\n0. Yes\n1. No"<<endl;
     cin >> decide;
-    if(cin.fail() || decide > 1 || decide < 0){
+        
+    while(cin.fail() || decide > 1 || decide < 0){
         cin.clear();
         cout <<"Selection not found. Try again.\n";
         cin.ignore(10000,'\n');
+        cin >> decide;
     }
-        if(decide == 0){
-            alive = true;
-            switch(race){
-                case 1:
-                    mainPlayer.setStrength(1);
-                    mainPlayer.setStealth(10);
-                    break;
-                case 2:
-                    mainPlayer.setStrength(10);
-                    mainPlayer.setStealth(1);
-                    break;
-                case 3:
-                    mainPlayer.setStrength(8);
-                    mainPlayer.setStealth(3);
-                    break;
-                case 4:
-                    mainPlayer.setStrength(3);
-                    mainPlayer.setStealth(8);
-                    break;
-                case 5:
-                    mainPlayer.setStrength(5);
-                    mainPlayer.setStealth(5);
-                    break;
-                default:
-                    break;
-            }
-        }
-        else{
-            return 0;
+        
+    if(decide == 0){
+        alive = true;
         }
     }
-    
+return 0;
 }
+
