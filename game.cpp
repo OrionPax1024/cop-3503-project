@@ -10,6 +10,7 @@ bool questOnePass = false;
 bool questTwoPass = false;
 bool questThreePass = false;
 int fightCount = 0;
+string sideQuest;
 
 
 bool fight(Player you, Player enemy){
@@ -281,6 +282,7 @@ void inputSelection(int input, int race, Player &mainPlayer){
         cout <<"Selection not found. Try again.\n";
         cin.ignore(10000,'\n');
     }else if(input == 0){
+        sideQuest = "Explore";
         if(questOnePass == false){
             trollScene(mainPlayer);
         }else if(questTwoPass == false){
@@ -292,10 +294,13 @@ void inputSelection(int input, int race, Player &mainPlayer){
         }
     }else if(input == 1){
         if(questOnePass == false){
+            sideQuest = "Tavern";
             junction(0, mainPlayer);
         }else if(questTwoPass == false){
+            sideQuest = "Forest";
             junction(1, mainPlayer);
         }else if(questThreePass == false){
+            sideQuest = "Cave";
             junction(2, mainPlayer);
         }else{
             cout<<"You go exploring and find nothing of interest."<<endl;
@@ -314,6 +319,7 @@ int main(){
     cout << "Enter Name: ";
     cin >> name;
     Player mainPlayer(0,0,name);
+    sideQuest = "Explore";
     
     while(true){
         cout << "Select your race:\n";
@@ -359,7 +365,7 @@ int main(){
     inputSelection(input, race, mainPlayer);
     
     while(alive){
-        cout<<"You are back on a road.\n0. Go forward.\n1. Explore.\n2. View stats."<<endl;
+        cout<<"You are back on a road.\n0. Go forward.\n1. "<<sideQuest<<".\n2. View stats."<<endl;
         cin>>input;
         inputSelection(input, race, mainPlayer);
     }
