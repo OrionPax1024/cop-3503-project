@@ -259,7 +259,7 @@ void forest(Player &mainPlayer){
     cout << "While exploring you enter a forest. You spot a little boy wandering around alone."<<endl;
     int choice = 0;
     if(forestCount == 0){
-        while(true){
+        while(forestCount == 0){
             cout << "What would you like to do?\n0. He's probably lost. Offer help.\n1. I don't talk to strangers. Continue walking." << endl;
             cin >> choice;
             if(cin.fail() || choice < 0 || choice > 1){
@@ -268,10 +268,9 @@ void forest(Player &mainPlayer){
                 cin.ignore(10000,'\n');
             }else if(choice == 0){
                 cout << "The boy thanks you for your kindness and offers you new shoes. \n";
-                forestCount++;
+                ++forestCount;
                 mainPlayer.addStealth();
-            }
-            else{
+            }else{
                 break;
             }
         }
