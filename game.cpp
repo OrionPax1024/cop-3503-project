@@ -204,20 +204,25 @@ void castleScene (Player &mainPlayer) {
 //A sidequest scene. The player is given the option to fight and doing so rewards in increased strength points.
 void tavern(Player &mainPlayer){
     cout << "While exploring you notice a building in the distance, upon closer inspection you see a sign that says: Drunken Horseman Tavern\nYou enter the tavern and notice they are holding bar fights."<<endl;
-    int choice = 0;
+    int choice;
     while(true){
+      int i = rand() % 10;
         cout << "What would you like to do?\n0. Leave the tavern.\n1. Fight." << endl;
         cin >> choice;
         if(cin.fail() || choice < 0 || choice > 1){
             cout << "Invalid Input, try again \n";
             cin.clear();
             cin.ignore(10000,'\n');
-        }else if(choice == 1 && fightCount < 3){
+        }else if(choice == 1 && fightCount < 4 && i > 2){
             cout << "You enter the ring and made quick work of your opponent \n";
             mainPlayer.addStrength();
             ++fightCount;
-        }else if(choice == 1 && fightCount >= 3){
+        }else if(choice == 1 && fightCount >= 4){
             cout << "You have grown too tired for another fight." << endl;
+        }
+        else if(choice == 1 && fightCount < 3 && i <= 2){
+          cout << "Your opponent was much bigger than expected and beat you up. \n" <<endl;
+          ++fightCount;
         }
         else{
             return;
