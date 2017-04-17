@@ -22,7 +22,7 @@ bool questOnePass = false;
 bool questTwoPass = false;
 bool questThreePass = false;
 int fightCount = 0;
-int forestCount = 0;
+bool hasShoes = false;
 int caveCount = 0;
 string sideQuest;
 
@@ -261,28 +261,28 @@ void cave(Player &mainPlayer){
 }
 //A sidequest scene. The player is given the option to assist a boy, and doing so increases stealth.
 void forest(Player &mainPlayer){
-    cout << "While exploring you enter a forest. You spot a little boy wandering around alone."<<endl;
+    if (hasShoes == true){
+        cout<<"You enter a peaceful forest. There's not much to do here. \n";
+    }
+    else{
+        cout << "While exploring you enter a forest. You spot a little boy wandering around alone. \n"<<endl;
+    }
     int choice = 0;
-    if(forestCount == 0){
-        while(forestCount == 0){
-            cout << "What would you like to do?\n0. He's probably lost. Offer help.\n1. I don't talk to strangers. Continue walking." << endl;
-            cin >> choice;
-            if(cin.fail() || choice < 0 || choice > 1){
-                cout << "Invalid Input, try again \n";
-                cin.clear();
-                cin.ignore(10000,'\n');
-            }else if(choice == 0){
-                cout << "The boy thanks you for your kindness and offers you new shoes. \n";
-                ++forestCount;
-                mainPlayer.addStealth();
-            }else{
-                break;
-            }
+    while(hasShoes == false){
+        cout << "What would you like to do?\n0. He's probably lost. Offer help.\n1. I don't talk to strangers. Continue walking." << endl;
+        cin >> choice;
+        if(cin.fail() || choice < 0 || choice > 1){
+            cout << "Invalid Input, try again \n";
+            cin.clear();
+            cin.ignore(10000,'\n');
+        }else if(choice == 0 ){
+            cout << "The boy thanks you for your kindness and offers you new shoes. \n";
+            hasShoes = true;
+            mainPlayer.addStealth();
         }
-    }else if(forestCount == 1){
-            cout<<"The boy no longer wants to speak to you."<<endl;
-    }else{
-        return;
+        else{
+            return;
+        }
     }
 }
 
