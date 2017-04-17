@@ -1,3 +1,15 @@
+/*
+Project Team 18 Presents:
+Final Project Spring 2017
+Team Members:
+Alex deQuevedo
+Andres Hernandez
+Alisa Watson
+Brendan Cohen
+Janine Faith Penaflorida
+Maxwell Nolan
+Yi Lin
+*/
 #include <iostream>
 #include <string>
 
@@ -57,7 +69,7 @@ Player::Player(int str, int sth, string name) {
     this->name = name;
     this->hasSword = false;
     this->strength = str;
-    this->stealth = str;
+    this->stealth = sth;
 }
 
 void Player::setName(string name) {
@@ -75,7 +87,6 @@ string Player::getName() {
 bool Player::getHasSword() {
     return hasSword;
 }
-
 
 void Player::printStats(int race) {
     cout << name << ", the "<< title[race-1] << endl;
