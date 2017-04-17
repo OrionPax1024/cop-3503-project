@@ -1,10 +1,22 @@
+/*
+Project Team 18 Presents:
+Final Project Spring 2017
+Team Members:
+Alex deQuevedo
+Andres Hernandez
+Alisa Watson
+Brendan Cohen
+Janine Faith Penaflorida
+Maxwell Nolan
+Yi Lin
+*/
 #include <iostream>
 #include "entity.h"
 #include <string>
 
 using namespace std;
 
-
+//Global variables set to default settings
 bool alive;
 bool questOnePass = false;
 bool questTwoPass = false;
@@ -12,7 +24,8 @@ bool questThreePass = false;
 int fightCount = 0;
 string sideQuest;
 
-
+//"fight" mechanic that compares player strength to enemy strength. 
+//Random number element that highly favors success if you are stronger than enemy, but very unfavored if not.
 bool fight(Player you, Player enemy){
     int rng = rand() % 100 +1;
     if(you.getStrength() >= enemy.getStrength()){
@@ -29,7 +42,7 @@ bool fight(Player you, Player enemy){
         }
     }
 }
-
+//Player encounters trolls in this main checkpoint scene. By hiding long enough the player easily defeats the trolls.
 void trollScene(Player &mainPlayer){
     int input;
     int hideCount = 0;
@@ -55,8 +68,9 @@ void trollScene(Player &mainPlayer){
             alive = false;
         }
     }
-
 }
+//Player encounters a dragon in this main checkpoint scene. By wielding a sword obtained from the sphinx scene, the
+//dragon is easily defeated, otherwise, sneaking past may be successful.
 void dragonScene (Player &mainPlayer) {
     int input;
     cout << "In the distance you spot a dragon in your path. There are no other routes. You get closer and notice it is fast asleep.\n0. Try and sneak past the dragon.\n1. Fight the dragon."<<endl;
@@ -85,7 +99,9 @@ void dragonScene (Player &mainPlayer) {
         break;
     }
 }
-
+//Player encounters a sphinx in this main checkpoint scene. Answering one of the three riddles correctly allows the 
+//player to move further into the game. Failure leads to game over. If the first riddle is answered correctly the player
+//receives a Dragonslaying sword.
 void sphinxScene (Player &mainPlayer) {
     string riddleAnswer;
     Sphinx Sphinx;
@@ -99,25 +115,26 @@ void sphinxScene (Player &mainPlayer) {
         }
         else{
             cout << "\"Wrong!!!\"" << endl;
-        Sphinx.remainingAttempts--;
-        if (Sphinx.remainingAttempts == 0){
+            Sphinx.remainingAttempts--;
+            if(Sphinx.remainingAttempts == 0){
             break;
+                }
             }
-        }
-    }
-    if (Sphinx.getRemainingAttempts() != 0) {
-        cout << "\"Congratulations. You have passed the test of time.\"" << endl;
-        if(Sphinx.getRemainingAttempts() == 3){
-        cout << "\"Take this sword, as a gift. It might prove useful in the future.\"" << endl;
-            mainPlayer.setHasSword();
-        }
-        questTwoPass = true;
-    }else if (Sphinx.getRemainingAttempts() == 0) {
-        cout << "You are out of tries. Game Over.";
-        alive = false;
+      }
+        if(Sphinx.getRemainingAttempts() != 0) {
+            cout << "\"Congratulations. You have passed the test of time.\"" << endl;
+            if(Sphinx.getRemainingAttempts() == 3){
+                cout << "\"Take this sword, as a gift. It might prove useful in the future.\"" << endl;
+                mainPlayer.setHasSword();
+            }
+            questTwoPass = true;
+        }else if (Sphinx.getRemainingAttempts() == 0) {
+            cout << "\"You are out of tries. For that, you must die. Game Over.\"";
+            alive = false;
     }
 }
-
+//The final scene, the player enters a castle where randomly generated monsters continue to spawn until the player
+//is defeated.
 void castleScene (Player &mainPlayer) {
     int input;
     int rn = rand() % 4;
@@ -182,7 +199,7 @@ void castleScene (Player &mainPlayer) {
         }
     }
 }
-
+//A sidequest scene. The player is given the option to fight and doing so rewards in increased strength points.
 void tavern(Player &mainPlayer){
     cout << "While exploring you notice a building in the distance, upon closer inspection you see a sign that says: Drunken Horseman Tavern\nYou enter the tavern and notice they are holding bar fights."<<endl;
     int choice = 0;
@@ -205,7 +222,7 @@ void tavern(Player &mainPlayer){
         }
     }
 }
-
+//A sidequest scene. The player is given the option to either fight monsters or evade them, granting strength points or stealth points respectively.
 void cave(Player &mainPlayer){
     cout << "You have discovered a cave.\nYou decide to enter in the hopes that there might be treasure.\n";
     int choice;
@@ -236,11 +253,9 @@ void cave(Player &mainPlayer){
         }
     }
 }
-
+//A sidequest scene. The player is given the option to assist a boy, and doing so increases stealth.
 void forest(Player &mainPlayer){
-    
-    cout << "While exploring you enter a forest. You spot a little boy wandering around alone."<<endl;
-    
+    cout << "While exploring you enter a forest. You spot a little boy wandering around alone."<<endl;    
     int choice = 0;
     while(true){
         cout << "What would you like to do?\n0. He's probably lost. Offer help.\n1. I don't talk to strangers. Continue walking." << endl;
@@ -258,24 +273,7 @@ void forest(Player &mainPlayer){
         }
     }
 }
-
-void junction(int junctionType, Player &mainPlayer){
-    switch(junctionType){
-        case 0:
-            tavern(mainPlayer);
-            break;
-        case 1:
-            forest(mainPlayer);
-            break;
-        case 2:
-            cave(mainPlayer);
-            break;
-        default:
-            cout<<"You've reached a dead end in the road.";
-            break;
-  }
-}
-
+//Input selector that after displaying the menu directs the player(and Player Object) to the appropriate task.
 void inputSelection(int input, int race, Player &mainPlayer){
     if(cin.fail() || input < 0 || input > 2){
         cin.clear();
@@ -295,13 +293,13 @@ void inputSelection(int input, int race, Player &mainPlayer){
     }else if(input == 1){
         if(questOnePass == false){
             sideQuest = "Tavern";
-            junction(0, mainPlayer);
+            tavern(mainPlayer);
         }else if(questTwoPass == false){
             sideQuest = "Forest";
-            junction(1, mainPlayer);
+            forest(mainPlayer);
         }else if(questThreePass == false){
             sideQuest = "Cave";
-            junction(2, mainPlayer);
+            cave(mainPlayer);
         }else{
             cout<<"You go exploring and find nothing of interest."<<endl;
         }
@@ -310,7 +308,7 @@ void inputSelection(int input, int race, Player &mainPlayer){
     }
 
 }
-
+//Main function, that holds variables and calls to functions integral to starting/maintaining the game as well as making a character.
 int main(){
     alive = true;
     string name;
