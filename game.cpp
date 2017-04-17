@@ -246,7 +246,6 @@ void cave(Player &mainPlayer){
             else if (choice == 1) {
                 cout << "You managed to escape." << endl;
                 mainPlayer.addStealth();
-                break;
             }
         }
         else if (i == 5) {
