@@ -16,12 +16,13 @@ Yi Lin
 
 using namespace std;
 
-//Global variables set to default settings
+//Global variables set to default values
 bool alive;
 bool questOnePass = false;
 bool questTwoPass = false;
 bool questThreePass = false;
 int fightCount = 0;
+int forestCount = 0;
 string sideQuest;
 
 //"fight" mechanic that compares player strength to enemy strength. 
@@ -257,6 +258,7 @@ void cave(Player &mainPlayer){
 void forest(Player &mainPlayer){
     cout << "While exploring you enter a forest. You spot a little boy wandering around alone."<<endl;    
     int choice = 0;
+    if(forestCount == 0){
     while(true){
         cout << "What would you like to do?\n0. He's probably lost. Offer help.\n1. I don't talk to strangers. Continue walking." << endl;
         cin >> choice;
@@ -266,10 +268,14 @@ void forest(Player &mainPlayer){
             cin.ignore(10000,'\n');
         }else if(choice == 0 ){
             cout << "The boy thanks you for your kindness and offers you new shoes. \n";
+            forestCount++;
             mainPlayer.addStealth();
         }
         else{
             return;
+        }
+    }else{
+        cout<<"The boy no longer wants to speak to you."<<endl;
         }
     }
 }
