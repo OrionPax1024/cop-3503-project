@@ -131,7 +131,7 @@ void sphinxScene (Player &mainPlayer) {
         }
         questTwoPass = true;
     }else if (Sphinx.getRemainingAttempts() == 0) {
-        cout << "\"You are out of tries. For that, you must die. Game Over.\"";
+        cout << "\"You are out of tries. For that, you must die. Game Over.\""<<endl;
         alive = false;
     }
 }
